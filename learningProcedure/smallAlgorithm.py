@@ -1,4 +1,8 @@
 import math
+import re
+import time
+import string
+import random
 
 
 class Algorithm(object):
@@ -69,17 +73,20 @@ class Algorithm(object):
                 text = text.replace(i, '***')
         return text
 
-    def prime(self):
-        list1 = []
-        for i in range(101, 201):
+    def isPrime(self, n):
+        rst = [2]
 
-            for j in range(2, i):
+        for i in range(3, n + 1):
+
+            better = int(math.sqrt(i) + 2)
+
+            for j in range(2, better):
                 if i % j == 0:
                     break
-                else:
-                    list1.append(i)
-                    break
-        return list1
+            else:
+                rst.append(i)
+
+        return rst
 
 
 if __name__ == '__main__':
@@ -97,17 +104,25 @@ if __name__ == '__main__':
     
     text = input('请发言：')
     print(test.textFilter(text))
+    
+    content = input('输入字符串：')
+    t1 = time.time()
+    content.swapcase()
+    t2 = time.time()
+    cost1 = t2 - t1
+
+    t3 = time.time()
+    test.convertToLower(content)
+    t4 = time.time()
+    cost2 = t4 - t3
+    print(cost1, '\r\n', cost2)
     '''
-    rst = test.prime()
-    k = 0
-    for i in rst:
-        print(i, end=' ')
-        k += 1
-        if k % 10 == 0:
-            print()
-    print(len(rst))
-
-
+    s1 = list(string.ascii_letters + string.digits+string.punctuation)
+    rst = ''.join(list(random.choice(s1) for i in range(100)))
+    print(rst)
+    content = 'hehe, sha zi a ni heihei'
+    pattern = re.compile(r'\b\w+i\b')
+    print(pattern.search(content))
 
 
 
