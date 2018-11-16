@@ -1,4 +1,5 @@
 import calendar
+import time
 
 
 # calendar 测试
@@ -13,4 +14,17 @@ class MyCalendar(object):
         return cal
 
 
-cal1 = MyCalendar(2018)
+if __name__ == '__main__':
+    cal1 = MyCalendar(2018)
+    print(time.timezone)
+    str1 = input('请输入一串字符：')
+    rst = []
+    for i in str1:
+        if 'A' <= i <= 'Z':
+            s = i.lower()
+            rst.append(s)
+        else:
+            rst.append(i)
+    result = ''.join(rst)
+
+    print(result)
