@@ -1,57 +1,50 @@
-import math
+import requests
+import json
 import time
 import random
-import re
-
-# 最原始的获取素数
-def isPrime1(n):
-    rst = [2]
-    for i in range(3, n+1):
-
-        for j in range(2, i):
-            if i % j == 0:
-                break
-        else:
-            rst.append(i)
-    return rst
+import os
 
 
-# 稍微优化的获取素数
-def isPrime2(n):
-    rst = [2]
-
-    for i in range(3, n+1):
-
-        better = int(math.sqrt(i)+2)
-
-        for j in range(2, better):
-            if i % j == 0:
-                break
-        else:
-            rst.append(i)
-
-    return rst
+os.chdir('/Users/superdrj/downloads')
 
 
-def isPrime3(l1):
-    for i in range(len(l1)-1):
+# 下载一页数据：
+def get_one_page(url):
 
-        for j in range(len(l1)-1-i):
-            if l1[j] > l1[j+1]:
-                l1[j], l1[j+1] = l1[j+1], l1[j]
-    return l1
-
-'''
-l1 = list(random.randint(0, 10000) for i in range(10000))
-start = time.time()
-isPrime3(l1)
-print(time.time()-start)
-
-example = 'Zhejiang Normal University is an awesome Uni!'
-rst = re.findall(r'\b\w+', example)
-print(rst)
-'''
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36'
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.text
+    return None
 
 
+# 解析第一页数据：
+def parse_one_page(html):
+    data = json.loads(html)['cmts']
+    for item in data:
+        yield{
+            'comment': item['content'],
+            'data': item['time'].split(' ')[0],
+            'rate': item['score'],
+            'city': item['cityName'],
+            'nickname': item['nickName']
+        }
 
 
+# 保存数据
+def save_to_txt():
+    for i in range(1, 1001):
+        url = 'http://m.maoyan.com/mmdb/comments/movie/248566.json?_v_=yes&offset=' + str(i)
+        html = get_one_page(url)
+        print('正在保存第{}页.'.format(i))
+        for item in parse_one_page(html):
+            with open('xie_zheng.txt', 'a', encoding='utf-8') as f:
+                f.write(item['data'] + ',' + item['nickname'] + ',' + item['city'] + ',' + str(item['rate']) + ',' + item['comment'] + '\n')
+        time.sleep(5 + float(random.randint(1, 100)) / 20)
+
+
+if __name__ == '__main__':
+    save_to_txt()
+    

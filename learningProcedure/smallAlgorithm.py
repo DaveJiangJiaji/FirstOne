@@ -3,6 +3,8 @@ import re
 import time
 import string
 import random
+from datetime import datetime as dt
+import os
 
 
 class Algorithm(object):
@@ -116,13 +118,14 @@ if __name__ == '__main__':
     t4 = time.time()
     cost2 = t4 - t3
     print(cost1, '\r\n', cost2)
-    '''
+    
     s1 = list(string.ascii_letters + string.digits+string.punctuation)
     rst = ''.join(list(random.choice(s1) for i in range(100)))
     print(rst)
     content = 'hehe, sha zi a ni heihei'
     pattern = re.compile(r'\b\w+i\b')
     print(pattern.search(content))
+    '''
 
 
 
